@@ -25,7 +25,7 @@ Importing the Task
 
 Import the example task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
 
-https://raw.githubusercontent.com/cloudsidekick/automate-samples/master/winrm/Example-Winrm.json
+https://raw.githubusercontent.com/clearcode-labs/automate-samples/master/winrm/Example-Winrm.json
 
 Walkthrough
 -----------
