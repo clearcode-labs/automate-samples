@@ -7,27 +7,32 @@ This repo contains sample Tasks that can be used as a tutorial for learning Auto
 
 Each directory has a README file which will walk you through the sample Task. 
 
-To import a Task into your local Automate environment there are two options:
+To import these samples you can either import them at the command line or via the ClearCode user interface.
 
-**Option A** 
+**Import All at the Command Line** 
 
-Clone this repo locally and import the `.json`, `.xml` or `.csk` files found in the example directories of interest.
+NOTE: this option works on OSX and Linux, not Windows
 
+Clone this repo locally on the ClearCode linux server from GitHub.
+
+    cd $HOME
     git clone git://github.com/clearcode-labs/automate-samples.git
 
-Then in Automate go to `Tasks`, `Import a Backup File`. 
+Make sure you have the `.cclclient.conf` file setup properly. Refer to the installation instructions you received.
 
-Click the `Select` button and navigate to the example directory (such as automate-samples/looping).
+Then change into the `automate-samples` directory and run the import script. 
 
-Select the `.json` file in the example directory (e.g. Example-Looping.json).
+    cd automate-samples
+    ./import_all.sh
 
-NOTE: some task files in this repo are still in the old XML syntax with .xml or .csk extensions. They will import the same way as the Json files.
+**Import Select Task Samples at Command Line**
 
-Click the `Load` button. 
+Follow the previous instructions for cloning the sample repo up to the point where you run the import_all_.sh script. Instead change into the directory that contains the task you want to import and run the following command example. 
 
-Next click the `Import` button. 
+    cd winrm
+    ccl-import-backup --force -f Example-Winrm.json
 
-**Option B** 
+**Import Through the User Interface**
 
 Import the task files individually directly from Github.
 
@@ -52,10 +57,6 @@ Copy the link out of your browser's address field.
 Then in Automate go to `Tasks`, `Import a Backup File`.  Paste the raw url to the file in the URL input box and press enter. The big box in the middle should populate with json. 
 
 Next click the `Import` button. 
-
-**Option C**
-
-Go through the same process for Option B above except that except instead of copying the link to the raw file, copy all of the json to your browsers copy buffer (CNTL-A, CNTL-C) and paste it into the big box on the `Import a Backup File` page and click `Import`.  
 
 **Final Thoughts**
 
