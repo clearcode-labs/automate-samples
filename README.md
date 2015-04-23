@@ -13,7 +13,7 @@ To import a Task into your local Automate environment there are two options:
 
 Clone this repo locally and import the `.json`, `.xml` or `.csk` files found in the example directories of interest.
 
-    git clone git://github.com/cloudsidekick/automate-samples.git
+    git clone git://github.com/clearcode-labs/automate-samples.git
 
 Then in Automate go to `Tasks`, `Import a Backup File`. 
 
@@ -35,7 +35,7 @@ Import the task files individually directly from Github.
     
 e.g.:
 
-    https://github.com/cloudsidekick/automate-samples/tree/master/looping
+    https://github.com/clearcode-labs/automate-samples/tree/master/looping
 
 Click on the `.json` file found in the directory.  
     
@@ -45,7 +45,7 @@ e.g.:
 
 On this page, click the `Raw` button right above the code. This will redirect you to the raw json file representing the task. 
 
-    https://raw.github.com/cloudsidekick/automate-samples/master/looping/Example-Looping.json
+    https://raw.github.com/clearcode-labs/automate-samples/master/looping/Example-Looping.json
 
 Copy the link out of your browser's address field. 
 
