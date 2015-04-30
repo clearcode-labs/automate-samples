@@ -21,9 +21,9 @@ Prerequisites
 
 This tutorial assumes that you are familiar with Amazon AWS EC2, have an account and have access to the AWS Console. Certain information will need to be gathered before starting this tutorial:
 
-    * AWS API key and secret key with the ability to start and terminate EC2 instances, create and delete security groups
-    * Select an EC2 Region (default in walkthrough is us-east-1)
-    * A Windows Server 2012 base image in that region (default in walkthrough is ami-cc93a8a4 in us-east-1)
+* AWS API key and secret key with the ability to start and terminate EC2 instances, create and delete security groups
+* Select an EC2 Region (default in walkthrough is us-east-1)
+* A Windows Server 2012 base image in that region (default in walkthrough is ami-cc93a8a4 in us-east-1)
 
 > In this tutorial we will use EC2 Classic Security Groups for simplicity's sake (not VPC)
 
@@ -41,7 +41,7 @@ Once the task has been imported, you may notice Comments in the task or Notes on
 
 Step one setups up from variables to use. If you want to use another region and/or AMI or size, change that here. 
 
-> This sample uses EC2 Classic Security Groups. If you change the instance type to one that does not support Classic Security Groups, the task may not run properly and will need alterations outside of the scope of this sample.
+> NOTE: This sample uses EC2 Classic Security Groups. If you change the instance type to one that does not support Classic Security Groups, the task may not run properly and will need alterations outside of the scope of this sample.
 
 Step two generates a random 8 character string. This will be used as part of the EC2 security group that is created.
 
@@ -63,3 +63,5 @@ Running
 -------
 
 Run this task without making modifications first. Then if desired, change the region and image AMI. Or, add in your own WinRM logic. 
+
+> NOTE: this is a basic task with little error handling. If the task errors out it may leave EC2 resources in place and you will need to clean them up using the AWS console. Error handling is out of the scope of this tutorial. 
