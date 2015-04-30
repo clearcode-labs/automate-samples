@@ -27,6 +27,12 @@ This tutorial assumes that you are familiar with Amazon AWS EC2, have an account
 
 > NOTE: In this tutorial we will use EC2 Classic Security Groups for simplicity's sake (not VPC)
 
+Setup Cloud Credentials
+-----------------------
+
+Before beginning with importing and running the task, you must setup the AWS credentials in ClearCode. See http://docs.clearcodelabs.com/docs/automate/cloud/cloud-account.html
+
+
 Importing the Task
 ------------------
 
