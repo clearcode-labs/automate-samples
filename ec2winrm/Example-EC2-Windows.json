@@ -1,0 +1,1125 @@
+[
+    {
+        "Status": "Development", 
+        "Code": "ex-025", 
+        "Description": "Starts a Windows VM in EC2, configures it for WinRM, performs remote management, terminates instance", 
+        "Parameters": [], 
+        "QueueDepth": null, 
+        "MaxVersion": 1.0, 
+        "IsDefaultVersion": true, 
+        "NextMinorVersion": "1.001", 
+        "Version": 1.0, 
+        "NextMajorVersion": "2.000", 
+        "NumberOfApprovedVersions": 0, 
+        "Codeblocks": [
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "result_name": {
+                                "result_name": "result", 
+                                "__input_type": "text", 
+                                "__label": "Result Variable", 
+                                "__break_before": "true"
+                            }, 
+                            "__name": "aws_ec2_DescribeInstances", 
+                            "Filter.n": {
+                                "__is_array": "true", 
+                                "Item::Filter::0": {
+                                    "Name": {
+                                        "__input_type": "text", 
+                                        "Name": ""
+                                    }, 
+                                    "Value.m": {
+                                        "__is_array": "true", 
+                                        "Item::Value::0": {
+                                            "__input_type": "text", 
+                                            "Value": ""
+                                        }
+                                    }
+                                }
+                            }, 
+                            "aws_region": {
+                                "__input_type": "dropdown", 
+                                "__label": "AWS Region", 
+                                "__hr_after": "true", 
+                                "aws_region": "[$region$]", 
+                                "__dataset": "ddDataSource_GetAWSClouds", 
+                                "__class": "combo w300px", 
+                                "__datasource": "function"
+                            }, 
+                            "InstanceId.n": {
+                                "Item::InstanceId::0": {
+                                    "InstanceId": "[$instance$]", 
+                                    "__input_type": "text"
+                                }, 
+                                "__is_array": "true"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "describe the instance", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "getinstancestatus", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_DescribeInstances"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "DEFAULT", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "dnsname"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "[[result^//dnsName]]"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "extract the state and external dns from the xml", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "getinstancestatus", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "function": "", 
+                                            "__name": "break_loop"
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$state$]\" == \"running\""
+                                    }
+                                }
+                            }, 
+                            "else": {
+                                "function": {
+                                    "__snip": "seconds", 
+                                    "__name": "sleep", 
+                                    "seconds": {
+                                        "seconds": "[$sleep_secs$]", 
+                                        "__input_type": "text", 
+                                        "__label": "Sleep"
+                                    }
+                                }, 
+                                "__input_type": "text"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "test to see if the instance is running, if not sleep", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "getinstancestatus", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }
+                ], 
+                "Name": "getinstancestatus"
+            }, 
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "retries": {
+                                "retries": "20"
+                            }, 
+                            "status_code": {
+                                "status_code": "code"
+                            }, 
+                            "cookie_out": {
+                                "cookie_out": ""
+                            }, 
+                            "headers": {
+                                "Item::pair::0": {
+                                    "value": {
+                                        "value": ""
+                                    }, 
+                                    "key": {
+                                        "key": ""
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "url": {
+                                "url": "http://[$dnsname$]:5985/wsman"
+                            }, 
+                            "response_body": {
+                                "response_body": ""
+                            }, 
+                            "status_msg": {
+                                "status_msg": ""
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "http", 
+                            "type": {
+                                "type": "GET"
+                            }, 
+                            "timeout": {
+                                "timeout": "30"
+                            }, 
+                            "response_info": {
+                                "response_info": ""
+                            }, 
+                            "response_header": {
+                                "response_header": ""
+                            }, 
+                            "data": {
+                                "data": ""
+                            }, 
+                            "response_time_ms": {
+                                "response_time_ms": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "Wait until WinRM comes up", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "check_winrm_http", 
+                        "Commented": false, 
+                        "FunctionName": "http"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "function": "", 
+                                            "__name": "break_loop"
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$code$]\" == \"405\""
+                                    }
+                                }
+                            }, 
+                            "else": {
+                                "function": {
+                                    "seconds": {
+                                        "seconds": "30"
+                                    }, 
+                                    "__name": "sleep"
+                                }, 
+                                "__input_type": "text"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "check_winrm_http", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }
+                ], 
+                "Name": "check_winrm_http"
+            }, 
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "Item::variable::2": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "region"
+                                    }, 
+                                    "value": {
+                                        "value": "us-east-1"
+                                    }
+                                }, 
+                                "Item::variable::3": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "admpassword"
+                                    }, 
+                                    "value": {
+                                        "value": "Qw3r5Pi@"
+                                    }
+                                }, 
+                                "Item::variable::0": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "image"
+                                    }, 
+                                    "value": {
+                                        "value": "ami-cc93a8a4"
+                                    }
+                                }, 
+                                "Item::variable::1": {
+                                    "modifier": {
+                                        "modifier": "DEFAULT"
+                                    }, 
+                                    "name": {
+                                        "name": "type"
+                                    }, 
+                                    "value": {
+                                        "value": "m3.medium"
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Setup some variables for later use", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "substring", 
+                            "variable_name": {
+                                "variable_name": "sg"
+                            }, 
+                            "end": {
+                                "end": "8"
+                            }, 
+                            "start": {
+                                "start": "1"
+                            }, 
+                            "source": {
+                                "source": "[$_UUID$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Generate random security group name", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "substring"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "VpcId": {
+                                "VpcId": ""
+                            }, 
+                            "__name": "aws_ec2_CreateSecurityGroup", 
+                            "aws_region": {
+                                "aws_region": "[$region$]"
+                            }, 
+                            "GroupName": {
+                                "GroupName": "ccldemo[$sg$]"
+                            }, 
+                            "result_name": {
+                                "result_name": ""
+                            }, 
+                            "GroupDescription": {
+                                "GroupDescription": "ClearCode demo group, delete"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Create classic security group", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_CreateSecurityGroup"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "aws_ec2_AuthorizeSecurityGroupIngress", 
+                            "UserId": {
+                                "UserId": ""
+                            }, 
+                            "IpPermissions.n": {
+                                "Item::IpPermissions::0": {
+                                    "ToPort": {
+                                        "ToPort": "80"
+                                    }, 
+                                    "FromPort": {
+                                        "FromPort": "80"
+                                    }, 
+                                    "IpRanges.m": {
+                                        "Item::IpRanges::0": {
+                                            "CidrIp": {
+                                                "CidrIp": "0.0.0.0/0"
+                                            }
+                                        }, 
+                                        "__is_array": "true"
+                                    }, 
+                                    "IpProtocol": {
+                                        "IpProtocol": "tcp"
+                                    }, 
+                                    "Groups.m": {
+                                        "Item::Groups::0": {
+                                            "GroupName": {
+                                                "GroupName": ""
+                                            }, 
+                                            "UserId": {
+                                                "UserId": ""
+                                            }, 
+                                            "GroupId": {
+                                                "GroupId": ""
+                                            }
+                                        }, 
+                                        "__is_array": "true"
+                                    }
+                                }, 
+                                "Item::IpPermissions::1": {
+                                    "ToPort": {
+                                        "ToPort": "5985"
+                                    }, 
+                                    "FromPort": {
+                                        "FromPort": "5985"
+                                    }, 
+                                    "IpRanges.m": {
+                                        "Item::IpRanges::0": {
+                                            "CidrIp": {
+                                                "CidrIp": "0.0.0.0/0"
+                                            }
+                                        }, 
+                                        "__is_array": "true"
+                                    }, 
+                                    "IpProtocol": {
+                                        "IpProtocol": "tcp"
+                                    }, 
+                                    "Groups.m": {
+                                        "Item::Groups::0": {
+                                            "GroupName": {
+                                                "GroupName": ""
+                                            }, 
+                                            "UserId": {
+                                                "UserId": ""
+                                            }, 
+                                            "GroupId": {
+                                                "GroupId": ""
+                                            }
+                                        }, 
+                                        "__is_array": "true"
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "aws_region": {
+                                "aws_region": "[$region$]"
+                            }, 
+                            "GroupName": {
+                                "GroupName": "ccldemo[$sg$]"
+                            }, 
+                            "result_name": {
+                                "result_name": ""
+                            }, 
+                            "GroupId": {
+                                "GroupId": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Open ports 80 and 5985", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_AuthorizeSecurityGroupIngress"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "aws_ec2_RunInstances", 
+                            "SecurityGroup.n": {
+                                "Item::SecurityGroup::0": {
+                                    "SecurityGroup": "ccldemo[$sg$]"
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "MinCount": {
+                                "MinCount": "1"
+                            }, 
+                            "RamdiskId": {
+                                "RamdiskId": ""
+                            }, 
+                            "PrivateIpAddress": {
+                                "PrivateIpAddress": ""
+                            }, 
+                            "Monitoring.Enabled": {
+                                "Monitoring.Enabled": ""
+                            }, 
+                            "ImageId": {
+                                "ImageId": "[$image$]"
+                            }, 
+                            "KeyName": {
+                                "KeyName": ""
+                            }, 
+                            "ClientToken": {
+                                "ClientToken": ""
+                            }, 
+                            "SubnetId": {
+                                "SubnetId": ""
+                            }, 
+                            "InstanceType": {
+                                "InstanceType": "[$type$]"
+                            }, 
+                            "AddressingType": {
+                                "AddressingType": ""
+                            }, 
+                            "Placement": {
+                                "Tenancy": {
+                                    "Tenancy": ""
+                                }, 
+                                "GroupName": {
+                                    "GroupName": ""
+                                }, 
+                                "AvailabilityZone": {
+                                    "AvailabilityZone": ""
+                                }
+                            }, 
+                            "aws_region": {
+                                "aws_region": "[$region$]"
+                            }, 
+                            "InstanceInitiatedShutdownBehavior": {
+                                "InstanceInitiatedShutdownBehavior": ""
+                            }, 
+                            "KernelId": {
+                                "KernelId": ""
+                            }, 
+                            "UserData": {
+                                "UserData": "<powershell>\n$admin = [adsi](\"WinNT://./administrator, user\")\n$admin.psbase.invoke(\"SetPassword\", \"[$admpassword$]\")\n</powershell>\n<script>\nwinrm quickconfig -q & winrm set winrm/config @{MaxTimeoutms=\"1800000\"} & winrm set winrm/config/service @{AllowUnencrypted=\"true\"} & winrm set winrm/config/service/auth @{Basic=\"true\"} & netsh advfirewall firewall add rule name=\"WinRM 5985\" protocol=TCP dir=in localport=5985 action=allow & netsh advfirewall firewall add rule name=\"IIS 80\" protocol=TCP dir=in localport=80 action=allow\n</script>"
+                            }, 
+                            "BlockDeviceMapping.n": {
+                                "Item::BlockDeviceMapping::0": {
+                                    "VirtualName": {
+                                        "VirtualName": ""
+                                    }, 
+                                    "DeviceName": {
+                                        "DeviceName": ""
+                                    }, 
+                                    "NoDevice": {
+                                        "NoDevice": ""
+                                    }, 
+                                    "Ebs": {
+                                        "SnapshotId": {
+                                            "SnapshotId": ""
+                                        }, 
+                                        "DeleteOnTermination": {
+                                            "DeleteOnTermination": ""
+                                        }, 
+                                        "VolumeSize": {
+                                            "VolumeSize": ""
+                                        }
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "MaxCount": {
+                                "MaxCount": "1"
+                            }, 
+                            "result_name": {
+                                "result_name": "result"
+                            }, 
+                            "SecurityGroupId.n": {
+                                "Item::SecurityGroupId::0": {
+                                    "SecurityGroupId": ""
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "DisableApiTermination": {
+                                "DisableApiTermination": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Start a VM and enable WinRM, open firewall, set Admin password", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_RunInstances"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "DEFAULT", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "instance"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "[$result^//instanceId$]"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "extract the instance id from the result xml", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "log_msg", 
+                            "message": {
+                                "message": "Instance ID is [$instance$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Print the instance id", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "log_msg"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__snip": "codeblock", 
+                            "__name": "codeblock", 
+                            "codeblock": {
+                                "__input_type": "text", 
+                                "codeblock": "wait_for_boot"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "call codeblock the waits until the instance is running", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "codeblock"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "seconds": {
+                                "seconds": "60"
+                            }, 
+                            "__name": "sleep"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Give Windows 60 seconds to finish booting", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "sleep"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "start": {
+                                "start": "1"
+                            }, 
+                            "max": {
+                                "max": ""
+                            }, 
+                            "counter": {
+                                "counter": "z"
+                            }, 
+                            "__name": "loop", 
+                            "test": {
+                                "test": "<="
+                            }, 
+                            "increment": {
+                                "increment": "1"
+                            }, 
+                            "compare_to": {
+                                "compare_to": "10"
+                            }, 
+                            "action": {
+                                "function": {
+                                    "__name": "codeblock", 
+                                    "codeblock": {
+                                        "codeblock": "check_winrm_http"
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Loop until winrm comes up", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "loop"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "seconds": {
+                                "seconds": "30"
+                            }, 
+                            "__name": "sleep"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Just because WinRM listener is up doesn't mean it is ready, sleep for a bit", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "sleep"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "cloud_name": {
+                                "cloud_name": ""
+                            }, 
+                            "initial_prompt": {
+                                "initial_prompt": ""
+                            }, 
+                            "conn_type": {
+                                "conn_type": "winrm"
+                            }, 
+                            "__name": "new_connection", 
+                            "asset": {
+                                "asset": "address=[$dnsname$] userid=administrator password=[$admpassword$]"
+                            }, 
+                            "debug": {
+                                "debug": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Connect to Windows Server using WinRM", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "new_connection"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "return_code": {
+                                "return_code": ""
+                            }, 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "winrm_cmd", 
+                            "command": {
+                                "command": "Start /w pkgmgr /iu:IIS-WebServerRole;IIS-WebServer;IIS-CommonHttpFeatures;IIS-StaticContent;IIS-DefaultDocument;IIS-DirectoryBrowsing;IIS-HttpErrors;IIS-ApplicationDevelopment;IIS-ASPNET;IIS-NetFxExtensibility;IIS-ISAPIExtensions;IIS-ISAPIFilter;IIS-HealthAndDiagnostics;IIS-HttpLogging;IIS-LoggingLibraries;IIS-RequestMonitor;IIS-Security;IIS-RequestFiltering;IIS-HttpCompressionStatic;IIS-WebServerManagementTools;IIS-ManagementConsole;WAS-WindowsActivationService;WAS-ProcessModel;WAS-NetFxEnvironment;WAS-ConfigurationAPI"
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "Install IIS, enable .NET", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "winrm_cmd"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "drop_connection", 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Disconnect from Windows Server", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "drop_connection"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "seconds": {
+                                "seconds": "20"
+                            }, 
+                            "__name": "sleep"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Give IIS a chance to start", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "sleep"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "retries": {
+                                "retries": "6"
+                            }, 
+                            "status_code": {
+                                "status_code": ""
+                            }, 
+                            "cookie_out": {
+                                "cookie_out": ""
+                            }, 
+                            "headers": {
+                                "Item::pair::0": {
+                                    "value": {
+                                        "value": ""
+                                    }, 
+                                    "key": {
+                                        "key": ""
+                                    }
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "url": {
+                                "url": "http://[$dnsname$]"
+                            }, 
+                            "response_body": {
+                                "response_body": "httpbody"
+                            }, 
+                            "status_msg": {
+                                "status_msg": ""
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "http", 
+                            "type": {
+                                "type": "GET"
+                            }, 
+                            "timeout": {
+                                "timeout": "10"
+                            }, 
+                            "response_info": {
+                                "response_info": ""
+                            }, 
+                            "response_header": {
+                                "response_header": ""
+                            }, 
+                            "data": {
+                                "data": ""
+                            }, 
+                            "response_time_ms": {
+                                "response_time_ms": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "Test IIS endpoint", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "http"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "__name": "log_msg", 
+                                            "message": {
+                                                "message": "ALL IS WELL, IIS UP AND RUNNING"
+                                            }
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"IIS Windows Server\" in \"\"\"[$httpbody$]\"\"\""
+                                    }
+                                }
+                            }, 
+                            "else": {
+                                "function": {
+                                    "__name": "log_msg", 
+                                    "message": {
+                                        "message": "NO GOOD, ISS INSTALL FAILED!!!!!"
+                                    }
+                                }, 
+                                "__input_type": "text"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Test http body for a certain string", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "result_name": {
+                                "result_name": ""
+                            }, 
+                            "__name": "aws_ec2_TerminateInstances", 
+                            "InstanceId.n": {
+                                "Item::InstanceId::0": {
+                                    "InstanceId": "[$instance$]"
+                                }, 
+                                "__is_array": "true"
+                            }, 
+                            "aws_region": {
+                                "aws_region": "[$region$]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Terminate the VM", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_TerminateInstances"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "seconds": {
+                                "seconds": "60"
+                            }, 
+                            "__name": "sleep"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Sleep for a bit so that the instance terminates before deleting the security group", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "sleep"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "result_name": {
+                                "result_name": ""
+                            }, 
+                            "GroupName": {
+                                "GroupName": "ccldemo[$sg$]"
+                            }, 
+                            "aws_region": {
+                                "aws_region": "[$region$]"
+                            }, 
+                            "GroupId": {
+                                "GroupId": ""
+                            }, 
+                            "__name": "aws_ec2_DeleteSecurityGroup"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Remove the security group we created", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "aws_ec2_DeleteSecurityGroup"
+                    }
+                ], 
+                "Name": "MAIN"
+            }, 
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "__snip": "status", 
+                                            "__name": "end", 
+                                            "message": {
+                                                "__input_type": "textarea", 
+                                                "__label": "Message", 
+                                                "__label_style": "display: block;", 
+                                                "__class": "w95pct", 
+                                                "message": "Instance variable not populated. Erroring", 
+                                                "__rows": "3"
+                                            }, 
+                                            "status": {
+                                                "status": "Error", 
+                                                "__input_type": "dropdown", 
+                                                "__dataset": "Completed|Error|Cancelled", 
+                                                "__label": "Status", 
+                                                "__datasource": "local"
+                                            }
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$instance$]\" == \"\""
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "if we don't have an instance id, something is wrong", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "wait_for_boot", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "set_variable", 
+                            "variables": {
+                                "variable": {
+                                    "modifier": {
+                                        "__input_type": "select", 
+                                        "modifier": "DEFAULT", 
+                                        "__label": "Modifier"
+                                    }, 
+                                    "__label": "Variable", 
+                                    "name": {
+                                        "__input_type": "text", 
+                                        "__label": "Name", 
+                                        "name": "sleep_secs"
+                                    }, 
+                                    "value": {
+                                        "__input_type": "text", 
+                                        "__label": "Value", 
+                                        "value": "10"
+                                    }
+                                }, 
+                                "__label": "Variables"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "set the loop parameters", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "wait_for_boot", 
+                        "Commented": false, 
+                        "FunctionName": "set_variable"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "start": {
+                                "__input_type": "text", 
+                                "start": "1"
+                            }, 
+                            "max": {
+                                "__input_type": "text", 
+                                "max": ""
+                            }, 
+                            "counter": {
+                                "__input_type": "text", 
+                                "counter": "z"
+                            }, 
+                            "__name": "loop", 
+                            "test": {
+                                "test": "<=", 
+                                "__input_type": "select"
+                            }, 
+                            "increment": {
+                                "__input_type": "text", 
+                                "increment": "1"
+                            }, 
+                            "compare_to": {
+                                "__input_type": "text", 
+                                "compare_to": "[$num_tests$]"
+                            }, 
+                            "action": {
+                                "function": {
+                                    "__snip": "codeblock", 
+                                    "__name": "codeblock", 
+                                    "codeblock": {
+                                        "__input_type": "text", 
+                                        "codeblock": "getinstancestatus"
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "loop for a certain number of times testing the status", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "wait_for_boot", 
+                        "Commented": false, 
+                        "FunctionName": "loop"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "__snip": "status", 
+                                            "__name": "end", 
+                                            "message": {
+                                                "__input_type": "textarea", 
+                                                "__label": "Message", 
+                                                "__label_style": "display: block;", 
+                                                "__class": "w95pct", 
+                                                "message": "instance [$instance$] is not running, state is [$state$], dnsname is [$dnsname$]", 
+                                                "__rows": "3"
+                                            }, 
+                                            "status": {
+                                                "status": "Error", 
+                                                "__input_type": "dropdown", 
+                                                "__dataset": "Completed|Error|Cancelled", 
+                                                "__label": "Status", 
+                                                "__datasource": "local"
+                                            }
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$state$]\" != \"running\""
+                                    }
+                                }
+                            }, 
+                            "else": {
+                                "function": {
+                                    "__snip": "message", 
+                                    "__name": "log_msg", 
+                                    "message": {
+                                        "__input_type": "textarea", 
+                                        "__label": "Log", 
+                                        "__required": "true", 
+                                        "__label_style": "display: block;", 
+                                        "__class": "w95pct", 
+                                        "message": "instance [$instance$] is running, state is [$state$], dnsname is [$dnsname$]", 
+                                        "__rows": "2"
+                                    }
+                                }, 
+                                "__input_type": "text"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "at this point, if the instance is not running there is something wrong", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "wait_for_boot", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }
+                ], 
+                "Name": "wait_for_boot"
+            }
+        ], 
+        "ConcurrentInstances": null, 
+        "Name": "Example EC2 Windows"
+    }
+]
