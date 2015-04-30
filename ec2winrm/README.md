@@ -1,4 +1,4 @@
-Example - Winrm
+Example - EC2 Windows
 =============
 
 This example will show you how to use AWS EC2 to automate Windows Server 2012 processes.
@@ -25,7 +25,7 @@ This tutorial assumes that you are familiar with Amazon AWS EC2, have an account
 * Select an EC2 Region (default in walkthrough is us-east-1)
 * A Windows Server 2012 base image in that region (default in walkthrough is ami-cc93a8a4 in us-east-1)
 
-> In this tutorial we will use EC2 Classic Security Groups for simplicity's sake (not VPC)
+> NOTE: In this tutorial we will use EC2 Classic Security Groups for simplicity's sake (not VPC)
 
 Importing the Task
 ------------------
