@@ -83,7 +83,7 @@
                                     "value": {
                                         "__input_type": "text", 
                                         "__label": "Value", 
-                                        "value": "[[result^//dnsName]]"
+                                        "value": "[$result^//dnsName$]"
                                     }
                                 }, 
                                 "__label": "Variables"
