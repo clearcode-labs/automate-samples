@@ -10,7 +10,9 @@ Prerequisites
 
 You must have a linux instance that has ssh enabled and port 22 accepting traffic. You will also need a local username and password or a user name and private key for this machine.
 
-Also, if your linux server requires that public key authentication be used, you must setup your private key in ClearCode as a `Shared Credential`.  See Managing Shared Credentials for more information on setting up SSH Private Keys in ClearCode.
+Also, if your linux server requires that public key authentication be used, you must setup your private key in ClearCode as a `Shared Credential`.  See the following link about managing Shared Credentials for more information on setting up SSH Private Keys in ClearCode.
+
+http://docs.clearcodelabs.com/docs/automate/tasks/creds.html
 
 Importing the Task
 ------------------
