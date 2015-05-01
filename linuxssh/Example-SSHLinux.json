@@ -1,0 +1,372 @@
+[
+    {
+        "Status": "Development", 
+        "Code": "ex-012", 
+        "Description": "An example of using ssh to login to a linux machine and run shell commands. This is how to use ssh using a user id and password. Also demonstrates running a multi-line script in bash.", 
+        "Parameters": [
+            {
+                "prompt": "true", 
+                "name": "address", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "user", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "password", 
+                "required": "false", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "cred_name", 
+                "required": "false", 
+                "present_as": "value", 
+                "values": [
+                    ""
+                ], 
+                "encrypt": "false"
+            }
+        ], 
+        "QueueDepth": null, 
+        "MaxVersion": 1.0, 
+        "IsDefaultVersion": true, 
+        "NextMinorVersion": "1.001", 
+        "Version": 1.0, 
+        "NextMajorVersion": "2.000", 
+        "NumberOfApprovedVersions": 0, 
+        "Codeblocks": [
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "status": {
+                                                "status": "Error"
+                                            }, 
+                                            "__name": "end", 
+                                            "message": {
+                                                "message": "Either shared credential name or password must be passed in as a parameter."
+                                            }
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$cred_name$]\" == \"\" and \"[$password$]\" == \"\""
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Test that credential name or password has been passed in", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "conn_name": {
+                                                "conn_name": "CONN1", 
+                                                "__label": "as", 
+                                                "__input_type": "text", 
+                                                "__required": "true", 
+                                                "__class": "w200px", 
+                                                "__help": "Name this connection for reference in the Task."
+                                            }, 
+                                            "cloud_name": {
+                                                "__input_type": "dropdown", 
+                                                "__style": "combo", 
+                                                "cloud_name": ""
+                                            }, 
+                                            "conn_type": {
+                                                "conn_type": "ssh", 
+                                                "__input_type": "select"
+                                            }, 
+                                            "__name": "new_connection", 
+                                            "asset": {
+                                                "__input_type": "text", 
+                                                "asset": "address=[$address$] userid=[$user$] shared_cred=[$cred_name$]"
+                                            }, 
+                                            "__snip": "conn_name"
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$cred_name$]\" > \"\""
+                                    }
+                                }
+                            }, 
+                            "else": {
+                                "function": {
+                                    "conn_name": {
+                                        "conn_name": "CONN1", 
+                                        "__label": "as", 
+                                        "__input_type": "text", 
+                                        "__required": "true", 
+                                        "__class": "w200px", 
+                                        "__help": "Name this connection for reference in the Task."
+                                    }, 
+                                    "cloud_name": {
+                                        "__input_type": "dropdown", 
+                                        "__style": "combo", 
+                                        "cloud_name": ""
+                                    }, 
+                                    "conn_type": {
+                                        "conn_type": "ssh", 
+                                        "__input_type": "select"
+                                    }, 
+                                    "__name": "new_connection", 
+                                    "asset": {
+                                        "__input_type": "text", 
+                                        "asset": "address=[$address$] userid=[$user$] password=[$password$]"
+                                    }, 
+                                    "__snip": "conn_name"
+                                }, 
+                                "__input_type": "text"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "If using a shared credential, use it. Otherwise use password", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": "", 
+                                "__break_after": "true", 
+                                "__label": "Positive Response", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1", 
+                                "__label": "Connection", 
+                                "__input_type": "text", 
+                                "__required": "true", 
+                                "__break_after": "true", 
+                                "__connection_picker": "true"
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "cmd_line", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__required": "true", 
+                                "__label_style": "display: block;", 
+                                "command": "/bin/bash <<EOF\necho \"hello world\" > /tmp/ccl_sample.txt\ncat /tmp/ccl_sample.txt > /tmp/ccl_sample2.txt\ncp /tmp/ccl_sample2.txt /tmp/ccl_sample3.txt\ncp /tmp/ccl_sample3.txt /tmp/ccl_sample4.txt\ncp /tmp/ccl_sample4.txt /tmp/ccl_sample5.txt\ncp /tmp/ccl_sample5.txt /tmp/ccl_sample6.txt\nEOF", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "negative_response": {
+                                "__break_after": "true", 
+                                "__label": "Negative Response", 
+                                "negative_response": "", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "Example of executing a multi-line bash script, aka \"here document\"", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": "", 
+                                "__break_after": "true", 
+                                "__label": "Positive Response", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1", 
+                                "__label": "Connection", 
+                                "__input_type": "text", 
+                                "__required": "true", 
+                                "__break_after": "true", 
+                                "__connection_picker": "true"
+                            }, 
+                            "__row_delimiter": "10", 
+                            "__col_delimiter": "10", 
+                            "step_variables": {
+                                "Item::variable::0": {
+                                    "position": {
+                                        "position": "1"
+                                    }, 
+                                    "type": {
+                                        "type": "delimited"
+                                    }, 
+                                    "name": {
+                                        "name": "filename"
+                                    }
+                                }
+                            }, 
+                            "__parse_method": "2", 
+                            "__name": "cmd_line", 
+                            "command": {
+                                "__input_type": "textarea", 
+                                "__label": "Command", 
+                                "__required": "true", 
+                                "__label_style": "display: block;", 
+                                "command": "ls -1 /tmp/ccl_sample*.txt", 
+                                "__class": "w95pct", 
+                                "__rows": "3"
+                            }, 
+                            "timeout": {
+                                "__break_after": "true", 
+                                "__label": "Timeout", 
+                                "__option_tab": "Options", 
+                                "timeout": "", 
+                                "__input_type": "text"
+                            }, 
+                            "__snip": "command", 
+                            "negative_response": {
+                                "__break_after": "true", 
+                                "__label": "Negative Response", 
+                                "negative_response": "", 
+                                "__option_tab": "Options", 
+                                "__input_type": "text"
+                            }, 
+                            "__variables": "true"
+                        }, 
+                        "OutputRowDelimiter": 10, 
+                        "OutputParseType": 2, 
+                        "Description": "Example of parsing the output of a command into a variable array, see the \"Variables\" button", 
+                        "OutputColumnDelimiter": 10, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "start": {
+                                "__input_type": "text", 
+                                "start": "0"
+                            }, 
+                            "max": {
+                                "__input_type": "text", 
+                                "max": ""
+                            }, 
+                            "counter": {
+                                "__input_type": "text", 
+                                "counter": "z"
+                            }, 
+                            "__name": "loop", 
+                            "test": {
+                                "test": "<", 
+                                "__input_type": "select"
+                            }, 
+                            "increment": {
+                                "__input_type": "text", 
+                                "increment": "1"
+                            }, 
+                            "compare_to": {
+                                "__input_type": "text", 
+                                "compare_to": "[$ len(filename) $]"
+                            }, 
+                            "action": {
+                                "function": {
+                                    "positive_response": {
+                                        "positive_response": "", 
+                                        "__break_after": "true", 
+                                        "__label": "positive response", 
+                                        "__option_tab": "options", 
+                                        "__input_type": "text"
+                                    }, 
+                                    "conn_name": {
+                                        "conn_name": "CONN1", 
+                                        "__label": "connection", 
+                                        "__input_type": "text", 
+                                        "__required": "true", 
+                                        "__break_after": "true", 
+                                        "__connection_picker": "true"
+                                    }, 
+                                    "__parse_method": "2", 
+                                    "__name": "cmd_line", 
+                                    "command": {
+                                        "__input_type": "textarea", 
+                                        "__label": "command", 
+                                        "__required": "true", 
+                                        "__label_style": "display: block;", 
+                                        "command": "rm [$ filename[ [$z$] ] $]", 
+                                        "__class": "w95pct", 
+                                        "__rows": "3"
+                                    }, 
+                                    "timeout": {
+                                        "__break_after": "true", 
+                                        "__label": "timeout", 
+                                        "__option_tab": "options", 
+                                        "timeout": "", 
+                                        "__input_type": "text"
+                                    }, 
+                                    "__snip": "command", 
+                                    "negative_response": {
+                                        "__break_after": "true", 
+                                        "__label": "negative response", 
+                                        "negative_response": "", 
+                                        "__option_tab": "options", 
+                                        "__input_type": "text"
+                                    }, 
+                                    "__variables": "true"
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "Example of looping through a variable array and running a command", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "loop"
+                    }
+                ], 
+                "Name": "MAIN"
+            }
+        ], 
+        "ConcurrentInstances": null, 
+        "Name": "Example - SSH Linux"
+    }
+]
