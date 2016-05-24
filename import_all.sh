@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-find . -name "*.json" -exec ccl-import-backup --force -c replace -f {} \;
+find . -name "*.json" -exec ctm-import-backup --force -c replace -f {} \;

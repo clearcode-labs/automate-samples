@@ -125,7 +125,7 @@
                             }, 
                             "__name": "winrm_psh", 
                             "command": {
-                                "command": "$stream = [System.IO.StreamWriter] \"[$target_dir$]\\ccl_test.txt\"\n$s = @\"\n[$text$]\n\"@ | %{ $_.Replace(\"`n\",\"`r`n\") }\n$stream.WriteLine($s)\n$stream.close()"
+                                "command": "$stream = [System.IO.StreamWriter] \"[$target_dir$]\\test.txt\"\n$s = @\"\n[$text$]\n\"@ | %{ $_.Replace(\"`n\",\"`r`n\") }\n$stream.WriteLine($s)\n$stream.close()"
                             }, 
                             "timeout": {
                                 "timeout": ""
@@ -160,7 +160,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "dir [$target_dir$]\\ccl_test.txt", 
+                                "command": "dir [$target_dir$]\\test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -218,7 +218,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "type [$target_dir$]\\ccl_test.txt", 
+                                "command": "type [$target_dir$]\\test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -254,7 +254,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "del [$target_dir$]\\ccl_test.txt", 
+                                "command": "del [$target_dir$]\\test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -353,7 +353,7 @@
                                 "__input_type": "textarea", 
                                 "__label": "Command", 
                                 "__style": "display: block;", 
-                                "command": "dir [$target_dir$]\\ccl_test.txt", 
+                                "command": "dir [$target_dir$]\\test.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 

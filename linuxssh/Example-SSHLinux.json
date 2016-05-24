@@ -183,7 +183,7 @@
                                 "__label": "Command", 
                                 "__required": "true", 
                                 "__label_style": "display: block;", 
-                                "command": "/bin/bash <<EOF\necho \"hello world\" > /tmp/ccl_sample.txt\ncat /tmp/ccl_sample.txt > /tmp/ccl_sample2.txt\ncp /tmp/ccl_sample2.txt /tmp/ccl_sample3.txt\ncp /tmp/ccl_sample3.txt /tmp/ccl_sample4.txt\ncp /tmp/ccl_sample4.txt /tmp/ccl_sample5.txt\ncp /tmp/ccl_sample5.txt /tmp/ccl_sample6.txt\nEOF", 
+                                "command": "/bin/bash <<EOF\necho \"hello world\" > /tmp/ctm_sample.txt\ncat /tmp/ctm_sample.txt > /tmp/ctm_sample2.txt\ncp /tmp/ctm_sample2.txt /tmp/ctm_sample3.txt\ncp /tmp/ctm_sample3.txt /tmp/ctm_sample4.txt\ncp /tmp/ctm_sample4.txt /tmp/ctm_sample5.txt\ncp /tmp/ctm_sample5.txt /tmp/ctm_sample6.txt\nEOF", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 
@@ -251,7 +251,7 @@
                                 "__label": "Command", 
                                 "__required": "true", 
                                 "__label_style": "display: block;", 
-                                "command": "ls -1 /tmp/ccl_sample*.txt", 
+                                "command": "ls -1 /tmp/ctm_sample*.txt", 
                                 "__class": "w95pct", 
                                 "__rows": "3"
                             }, 

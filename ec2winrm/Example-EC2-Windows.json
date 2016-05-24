@@ -331,7 +331,7 @@
                                 "aws_region": "[$region$]"
                             }, 
                             "GroupName": {
-                                "GroupName": "ccldemo[$sg$]"
+                                "GroupName": "ctmdemo[$sg$]"
                             }, 
                             "result_name": {
                                 "result_name": ""
@@ -427,7 +427,7 @@
                                 "aws_region": "[$region$]"
                             }, 
                             "GroupName": {
-                                "GroupName": "ccldemo[$sg$]"
+                                "GroupName": "ctmdemo[$sg$]"
                             }, 
                             "result_name": {
                                 "result_name": ""
@@ -449,7 +449,7 @@
                             "__name": "aws_ec2_RunInstances", 
                             "SecurityGroup.n": {
                                 "Item::SecurityGroup::0": {
-                                    "SecurityGroup": "ccldemo[$sg$]"
+                                    "SecurityGroup": "ctmdemo[$sg$]"
                                 }, 
                                 "__is_array": "true"
                             }, 
@@ -917,7 +917,7 @@
                                 "result_name": ""
                             }, 
                             "GroupName": {
-                                "GroupName": "ccldemo[$sg$]"
+                                "GroupName": "ctmdemo[$sg$]"
                             }, 
                             "aws_region": {
                                 "aws_region": "[$region$]"

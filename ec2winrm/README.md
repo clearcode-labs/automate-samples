@@ -30,7 +30,7 @@ This tutorial assumes that you are familiar with Amazon AWS EC2, have an account
 Setup Cloud Credentials
 -----------------------
 
-Before beginning with importing and running the task, you must setup the AWS credentials in ClearCode. See http://docs.clearcodelabs.com/docs/automate/cloud/cloud-account.html
+Before beginning with importing and running the task, you must setup the AWS credentials in Continuum. See http://continuumdocs.versionone.com/docs/automate/cloud/cloud-account.html
 
 
 Importing the Task
@@ -38,7 +38,7 @@ Importing the Task
 
 Import the example task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
 
-https://raw.githubusercontent.com/clearcode-labs/automate-samples/master/ec2winrm/Example-EC2-Windows.json
+https://raw.githubusercontent.com/versionone/automate-samples/master/ec2winrm/Example-EC2-Windows.json
 
 Walkthrough
 -----------

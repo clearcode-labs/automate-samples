@@ -18,14 +18,14 @@ Prerequisites
 
 You must first have a Windows server available with WinRM setup and accessible to a local user account. See the following link for details on setting up WinRM.
 
-http://docs.clearcodelabs.com/docs/automate/tasks/windows.html
+http://continuumdocs.versionone.com/docs/automate/?tasks/windows.html
 
 Importing the Task
 ------------------
 
 Import the example task into Automate using the Task, Import a Backup File menu choice. Paste the following link into the "Enter a URL:" box, then click "Load", then "Import". 
 
-https://raw.githubusercontent.com/clearcode-labs/automate-samples/master/winrm/Example-Winrm.json
+https://raw.githubusercontent.com/versionone/automate-samples/master/winrm/Example-Winrm.json
 
 Walkthrough
 -----------
@@ -48,7 +48,7 @@ Step eleven looks for the file again. However this file was deleted in step seve
 
 Step thirteen is an example of using `wmic` command in Windows. Google "Windows Management Instrumentation Command-line". Simply another way get information from Windows from the command line. The important thing about this step is variable population. Click on the Variables button. Notice the `load` variable is getting set positionally. Click on `Manage Variables` to see how it is configured. Variables are set in this way by parsing the output returned by a winrm command. See the following link for more details. 
 
-http://docs.clearcodelabs.com/docs/automate/tasks/task-variables.html
+http://continuumdocs.versionone.com/docs/automate/tasks/task-variables.html
 
 Step fourteen print the load percentage determined from step thirteen. 
 
@@ -56,7 +56,7 @@ Step fifteen performs the Windows `set` command which prints the evironment vari
 
 Step sixteen uses the arrays to print each array value independently. The `loop` command is similar to for loops in most programming languages. See the sections on the following page concerning `Arrays` for more information on referencing array variables. 
 
-http://docs.clearcodelabs.com/docs/automate/tasks/task-variables.html
+http://continuumdocs.versionone.com/docs/automate/tasks/task-variables.html
 
 Finally step seventeen is another Powershell example. 
 
