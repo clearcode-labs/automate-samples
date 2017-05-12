@@ -1,0 +1,263 @@
+[
+    {
+        "Status": "Development", 
+        "Code": "sample", 
+        "Description": "", 
+        "Parameters": [
+            {
+                "prompt": "true", 
+                "name": "BRANCH", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    "master"
+                ], 
+                "encrypt": "false"
+            }, 
+            {
+                "prompt": "true", 
+                "name": "COMMIT", 
+                "required": "true", 
+                "present_as": "value", 
+                "values": [
+                    "master"
+                ], 
+                "encrypt": "false"
+            }
+        ], 
+        "QueueDepth": null, 
+        "MaxVersion": 1.0, 
+        "IsDefaultVersion": true, 
+        "NextMinorVersion": "1.001", 
+        "Version": 1.0, 
+        "NextMajorVersion": "2.000", 
+        "NumberOfApprovedVersions": 0, 
+        "Codeblocks": [
+            {
+                "Steps": [
+                    {
+                        "FunctionDefinition": {
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "cloud_name": {
+                                "cloud_name": ""
+                            }, 
+                            "initial_prompt": {
+                                "initial_prompt": ""
+                            }, 
+                            "conn_type": {
+                                "conn_type": "ssh"
+                            }, 
+                            "__name": "new_connection", 
+                            "asset": {
+                                "asset": "locahost"
+                            }, 
+                            "debug": {
+                                "debug": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "connect to localhost", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "new_connection"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": ""
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "cmd_line", 
+                            "negative_response": {
+                                "negative_response": ""
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }, 
+                            "command": {
+                                "command": "mkdir -p /var/continuum/workspace/[$ _TASK_INSTANCE $]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "create the workspace directory", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": ""
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "cmd_line", 
+                            "negative_response": {
+                                "negative_response": ""
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }, 
+                            "command": {
+                                "command": "cd /var/continuum/workspace/[$ _TASK_INSTANCE $]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "change to workspace directory", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": ""
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": "response"
+                            }, 
+                            "__name": "cmd_line", 
+                            "negative_response": {
+                                "negative_response": ""
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }, 
+                            "command": {
+                                "command": "/bin/bash <<\"EOF\"\nset -e\ngit clone -q -b [$ BRANCH[0] $] --depth 1 --single-branch git@github.com:spring-projects/spring-petclinic.git .\ngit checkout -q [$ COMMIT[0] $]\nls -l\necho \"hello world\"\ntouch /tmp/testfile\nrm /tmp/testfile\nEOF"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "clone git repo, run some automation", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": ""
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__row_delimiter": "10", 
+                            "__col_delimiter": "10", 
+                            "step_variables": {}, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": "command_status"
+                            }, 
+                            "__name": "cmd_line", 
+                            "command": {
+                                "command": "echo $?"
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }, 
+                            "negative_response": {
+                                "negative_response": ""
+                            }
+                        }, 
+                        "OutputRowDelimiter": 10, 
+                        "OutputParseType": 2, 
+                        "Description": "get the status of the automation", 
+                        "OutputColumnDelimiter": 10, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "positive_response": {
+                                "positive_response": ""
+                            }, 
+                            "conn_name": {
+                                "conn_name": "CONN1"
+                            }, 
+                            "__parse_method": "2", 
+                            "result_variable": {
+                                "result_variable": ""
+                            }, 
+                            "__name": "cmd_line", 
+                            "negative_response": {
+                                "negative_response": ""
+                            }, 
+                            "timeout": {
+                                "timeout": ""
+                            }, 
+                            "command": {
+                                "command": "rm -rf /var/continuum/workspace/[$ _TASK_INSTANCE $]"
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 2, 
+                        "Description": "remove the temporary workspace", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "cmd_line"
+                    }, 
+                    {
+                        "FunctionDefinition": {
+                            "__name": "if", 
+                            "tests": {
+                                "test": {
+                                    "action": {
+                                        "function": {
+                                            "status": {
+                                                "status": "Error"
+                                            }, 
+                                            "__name": "end", 
+                                            "message": {
+                                                "message": "command line process failed:\n[$ response $]"
+                                            }
+                                        }
+                                    }, 
+                                    "eval": {
+                                        "eval": "\"[$ command_status $]\" != \"0\""
+                                    }
+                                }
+                            }
+                        }, 
+                        "OutputRowDelimiter": 0, 
+                        "OutputParseType": 0, 
+                        "Description": "test the status of the automation", 
+                        "OutputColumnDelimiter": 0, 
+                        "Codeblock": "MAIN", 
+                        "Commented": false, 
+                        "FunctionName": "if"
+                    }
+                ], 
+                "Name": "MAIN"
+            }
+        ], 
+        "ConcurrentInstances": null, 
+        "Name": "Automation Sample Task"
+    }
+]
