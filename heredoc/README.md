@@ -32,7 +32,7 @@ https://help.github.com/articles/set-up-git/
 
 Navigate to Automate, Import a Backup File. In the "Enter a URL" box paste the following link:
 
-jjjjj
+https://raw.githubusercontent.com/versionone/automate-samples/master/heredoc/automation-sample.json
 
 Click Load, then Import. Edit the Task. 
 
